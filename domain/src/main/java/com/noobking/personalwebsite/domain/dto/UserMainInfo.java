@@ -9,7 +9,8 @@ public class UserMainInfo implements Serializable {
     private Long id;
     private String username;
     private String email;
-    private String rights;
+    private boolean rights;
+    private boolean status;
 
     public Long getId() {
         return id;
@@ -35,11 +36,19 @@ public class UserMainInfo implements Serializable {
         this.email = email;
     }
 
-    public String getRights() {
+    public boolean isRights() {
         return rights;
     }
 
-    public void setRights(String rights) {
+    public void setRights(boolean rights) {
         this.rights = rights;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

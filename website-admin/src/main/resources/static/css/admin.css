@@ -1,0 +1,55 @@
+/*登陆框*/
+.login-box {
+    width: 500px;
+    height: auto;
+    border: #DCDFE6 solid 1px;
+    margin: 180px auto;
+    padding: 35px 35px 15px 35px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    box-shadow: 0 0 25px #909399;
+}
+
+/*后台主要内容*/
+.admin-content {
+    border: #DCDFE6 solid 1px;
+    margin-top: 40px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+
+}
+
+/*滚动监听*/
+.admin-scrollspy {
+    position: absolute;
+    left: 15px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+}
+
+/*左右内边距设为0*/
+.admin-no-lr-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/*内外边距为0*/
+.admin-padding-margin-null {
+
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/*上下左右小内边距*/
+.admin-padding-lrtb-small {
+    padding: 20px !important;
+}
+
+/*详细信息条*/
+.admin-user-info-td {
+    overflow: auto;
+}

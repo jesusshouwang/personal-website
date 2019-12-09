@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>这个页面是模板页</title>
+
+    <!-- css公用 -->
+    <th:block th:fragment="_css">
+        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css"
+              th:href="@{/bootstrap/css/bootstrap.min.css}">
+        <link rel="stylesheet" href="../static/css/admin.css" th:href="@{/css/admin.css}">
+    </th:block>
+    <!-- css公用 -->
+</head>
+<body>
+
+<!-- 导航条 -->
+<nav th:fragment="_menu(n)" class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;box-shadow: 0 0 10px #e3f2fd;">
+    <a class="navbar-brand" href="/admin/main" th:href="@{/admin/main}">个人网站</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${n==1} ? 'active'" href="/user/list" th:href="@{/user/list}">用户管理<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${n==2} ? 'active'" href="/article/list" th:href="@{/article/list}">文章管理</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${n==3} ? 'active'" href="/website/list" th:href="@{/website/list}">推荐站点</a>
+            </li>
+        </ul>
+    </div>
+    <div class="dropdown dropdown-header">
+        <a th:text="${session?.loginUser?.username}" class="nav-link dropdown-toggle" href="#"
+           id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            username
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">权限</a>
+            <a class="dropdown-item" href="#" th:onclick="'getUserAllInfo('+ ${session?.loginUser?.id} +');'" data-toggle="modal" data-target="#modal-common">我的信息</a>
+            <a class="dropdown-item" href="#">上次登陆：<p
+                    th:text="${#dates.format(session?.loginUser?.lastLoginTime, 'yyyy-MM-dd HH:mm:ss')}"></p></a>
+            <a class="dropdown-item" href="/user/logout" th:href="@{/user/logout}">注销</a>
+        </div>
+    </div>
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</nav>
+<!-- 导航条 -->
+
+<!-- 模态框 -->
+<!-- Modal -->
+<th:block th:fragment="_modal">
+<div class="modal fade" id="modal-common" tabindex="-1" role="dialog" aria-labelledby="modal-common" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">获取标题失败</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                链接服务器失败
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+</th:block>
+    <!-- 模态框 -->
+
+</body>
+<!-- javascript -->
+<th:block th:fragment="_javascript">
+    <script src="../static/jquery/jquery-3.4.1.min.js" th:src="@{/jquery/jquery-3.4.1.min.js}"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</th:block>
+<!-- javascript -->
+</html>

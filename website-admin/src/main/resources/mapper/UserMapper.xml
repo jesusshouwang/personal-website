@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.noobking.personalwebsite.website.admin.mapper.UserMapper">
+    <sql id="userAllInfo">
+        a.id,
+        a.avatar,
+        a.username,
+        a.password,
+        a.email,
+        a.note,
+        a.rights,
+        a.status,
+        a.create_time AS createTime,
+        a.last_login_time AS lastLoginTime
+    </sql>
+    <!-- 根据id获取user全部信息 Start -->
+    <select id="getUserById" resultType="User">
+        SELECT
+        <include refid="userAllInfo"></include>
+        FROM
+        user AS a
+        WHERE a.id = #{id}
+    </select>
+    <!-- 根据id获取user全部信息 End -->
+    <!-- 根据username获取user全部信息 Start -->
+    <select id="getByUsername" resultType="User">
+        SELECT
+        <include refid="userAllInfo"></include>
+        FROM
+        user AS a
+        WHERE a.username = #{username}
+    </select>
+    <!-- 根据username获取user全部信息 End -->
+    <!-- 获取user的主要信息 Start -->
+    <select id="getAllUserMainInfo" resultType="UserMainInfo">
+        SELECT
+            a.id,
+            a.username,
+            a.email,
+            a.rights
+        FROM
+            user AS a
+    </select>
+    <!-- 获取user的主要信息 End -->
+    <!-- 刷新user的登陆时间 Start -->
+    <update id="updateLoginTime">
+        UPDATE
+            user
+        SET
+            last_login_time = #{lastLoginTime}
+        WHERE
+            id = #{id}
+    </update>
+    <!-- 刷新user的登陆时间 End -->
+    <!-- 修改user的权限 Start -->
+    <update id="updateUserRights">
+        UPDATE
+            user
+        SET
+            rights = #{rights}
+        WHERE
+            id = #{id}
+    </update>
+    <!-- 修改user的权限 End -->
+    <!-- 新增用户 Start -->
+    <insert id="insertUser">
+        INSERT INTO
+            user(
+            avatar,
+            username,
+            password,
+            email,
+            note,
+            rights,
+            status,
+            create_time,
+            last_login_time
+            )VALUES(
+            #{avatar},
+            #{username},
+            #{password},
+            #{note},
+            #{email},
+            #{rights},
+            #{status},
+            #{createTime},
+            #{lastLoginTime}
+        )
+    </insert>
+    <!-- 新增用户 End -->
+    <!-- 删除用户 Start -->
+    <delete id="deleteUser">
+        DELETE FROM
+            user
+        WHERE
+            id = #{id}
+    </delete>
+    <!-- 删除用户 End -->
+</mapper>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登陆</title>
+    <!-- css -->
+    <th:block th:replace="_fragment :: _css">
+        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css"
+              th:href="@{/bootstrap/css/bootstrap.min.css}">
+        <link rel="stylesheet" href="../static/css/admin.css" th:href="@{/css/admin.css}">
+    </th:block>
+    <!-- css -->
+</head>
+<body>
+
+<div class="login-box">
+    <h3 class="text-center">登陆</h3>
+    <form action="/user/login" method="post">
+        <div class="form-group">
+            <label for="username">用户名</label>
+            <input type="text" class="form-control" id="username" name="username" th:value="${loginParam?.username}">
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary form-control">提交</button>
+        </div>
+    </form>
+    <div class="alert alert-danger" th:class="${ResponseResult}? 'alert alert-danger':'hidden' " th:text="${ResponseResult?.message}" style="margin-top: 5px">消息提示区域</div>
+</div>
+
+
+</body>
+<!-- javascript -->
+<th:block th:replace="_fragment :: _javascript">
+    <script src="../static/jquery/jquery-3.4.1.min.js" th:src="@{/jquery/jquery-3.4.1.min.js}"></script>
+</th:block>
+<!-- javascript -->
+</html>

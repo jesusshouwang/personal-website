@@ -3,6 +3,9 @@ package com.noobking.personalwebsite.domain.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 登陆用户信息
+ */
 public class LoginUserInfo implements Serializable {
     private Long id;
     private String avatar;

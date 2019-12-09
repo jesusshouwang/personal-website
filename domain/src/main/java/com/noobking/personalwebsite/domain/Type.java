@@ -2,6 +2,9 @@ package com.noobking.personalwebsite.domain;
 
 import java.io.Serializable;
 
+/**
+ * 类型实体
+ */
 public class Type implements Serializable {
     private Long id;
     private String name;

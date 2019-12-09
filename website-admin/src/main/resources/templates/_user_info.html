@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-4">
+        <p>用户名：</p>
+    </div>
+    <div class="col-8">
+        <p class="admin-user-info-td" th:text="${userAllInfo?.username}"></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <p>用户签名：</p>
+    </div>
+    <div class="col-8">
+        <p class="admin-user-info-td" th:text="${userAllInfo?.note}"></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <p>邮箱：</p>
+    </div>
+    <div class="col-8">
+        <p class="admin-user-info-td" th:text="${userAllInfo?.email}"></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <p>权限：</p>
+    </div>
+    <div class="col-8">
+        <p class="admin-user-info-td" th:text="${userAllInfo?.rights}"></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <p>创建时间：</p>
+    </div>
+    <div class="col-8">
+        <p class="admin-user-info-td" th:text="${#dates.format(userAllInfo?.createTime, 'yyyy-MM-dd HH:mm:ss')}"></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <p>最后登陆：</p>
+    </div>
+    <div class="col-8">
+        <p class="admin-user-info-td" th:text="${#dates.format(userAllInfo?.lastLoginTime, 'yyyy-MM-dd HH:mm:ss')}"></p>
+    </div>
+</div>

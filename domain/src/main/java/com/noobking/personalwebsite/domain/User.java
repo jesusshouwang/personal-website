@@ -3,6 +3,9 @@ package com.noobking.personalwebsite.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 用户实体
+ */
 public class User implements Serializable {
     private Long id;
     private String avatar;
@@ -11,6 +14,7 @@ public class User implements Serializable {
     private String email;
     private String note;
     private boolean rights;
+    private boolean status;
     private Date createTime;
     private Date lastLoginTime;
 
@@ -62,12 +66,21 @@ public class User implements Serializable {
         this.note = note;
     }
 
-    public boolean getRights() {
-        return rights;
-    }
 
     public void setRights(boolean rights) {
         this.rights = rights;
+    }
+
+    public boolean isRights() {
+        return rights;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public Date getCreateTime() {

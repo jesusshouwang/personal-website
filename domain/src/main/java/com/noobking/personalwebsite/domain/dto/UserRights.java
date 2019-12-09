@@ -2,6 +2,9 @@ package com.noobking.personalwebsite.domain.dto;
 
 import java.io.Serializable;
 
+/**
+ * 主要携带用户权限
+ */
 public class UserRights implements Serializable {
 
     private Long id;

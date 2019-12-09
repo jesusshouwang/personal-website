@@ -5,6 +5,9 @@ import com.noobking.personalwebsite.domain.dto.UserMainInfo;
 
 import java.io.Serializable;
 
+/**
+ * 文章主要信息
+ */
 public class ArticleMainInfo implements Serializable {
     private Long id;
     private Type type;

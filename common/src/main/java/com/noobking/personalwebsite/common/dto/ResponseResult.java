@@ -1,7 +1,11 @@
-package com.noobking.personalwebsit.common.dto;
+package com.noobking.personalwebsite.common.dto;
 
 import java.io.Serializable;
 
+/**
+ * 统一的响应回复
+ * @param <T>
+ */
 public class ResponseResult<T> implements Serializable {
     //状态码
     private int code;

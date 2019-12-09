@@ -2,6 +2,9 @@ package com.noobking.personalwebsite.domain.dto;
 
 import java.io.Serializable;
 
+/**
+ * 文章的权限状态
+ */
 public class ArticleStatusInfo implements Serializable {
     private Long id;
     private boolean appreciation;
