@@ -1,0 +1,31 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: personal-website-admin
+  thymeleaf:
+    cache: false #关闭缓存
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/personal_website?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 12345678
+
+    hikari:
+      minimum-idle: 5
+      idle-timeout: 600000
+      maximum-pool-size: 10
+      auto-commit: true
+      pool-name: MyHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+mybatis:
+  type-aliases-package: com.noobking.personalwebsite.domain #实体类所在包
+  mapper-locations: classpath:/mapper/**/*.xml #xml文件
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #运行时在控制台输出sql语句，耗性能，实际部署时要关闭
