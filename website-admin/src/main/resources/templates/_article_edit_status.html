@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登陆</title>
+    <!-- css -->
+    <th:block th:replace="_fragment :: _css">
+        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css"
+              th:href="@{/bootstrap/css/bootstrap.min.css}">
+        <link rel="stylesheet" href="../static/css/admin.css" th:href="@{/css/admin.css}">
+    </th:block>
+    <!-- css -->
+</head>
+<body>
+
+<form id="editArticleStatusForm">
+    <div class="form-group form-row">
+        <div class="col-4">
+            <label>文章状态管理：</label>
+        </div>
+    </div>
+    <div class="form-group form-row">
+        <input type="hidden" name="id" th:value="${articleStatusInfo.id}" />
+        <div class="col-4"></div>
+        <div class="custom-control custom-switch custom-control-inline">
+            <input th:checked="${articleStatusInfo.appreciation}" type="checkbox" class="custom-control-input" id="appreciation" name="appreciation">
+            <label class="custom-control-label" for="appreciation">允许赞赏</label>
+        </div>
+    </div>
+    <div class="form-group form-row">
+        <div class="col-4"></div>
+        <div class="custom-control custom-switch custom-control-inline">
+            <input th:checked="${articleStatusInfo.share}" type="checkbox" class="custom-control-input" id="share" name="share">
+            <label class="custom-control-label" for="share">允许分享</label>
+        </div>
+    </div>
+    <div class="form-group form-row">
+        <div class="col-4"></div>
+        <div class="custom-control custom-switch custom-control-inline">
+            <input th:checked="${articleStatusInfo.comment}" type="checkbox" class="custom-control-input" id="comment" name="comment">
+            <label class="custom-control-label" for="comment">允许评论</label>
+        </div>
+    </div>
+
+    <div class="form-group form-row">
+        <div class="col-4"></div>
+        <div class="custom-control custom-switch custom-control-inline">
+            <input th:checked="${articleStatusInfo.recommendation}" type="checkbox" class="custom-control-input" id="recommendation" name="recommendation">
+            <label class="custom-control-label" for="recommendation">允许首页推荐</label>
+        </div>
+    </div>
+    <hr />
+    <div class="form-group form-row">
+        <div class="col-4"></div>
+        <div class="custom-control custom-switch custom-control-inline">
+            <input th:checked="${articleStatusInfo.published}" type="checkbox" class="custom-control-input" id="published" name="published">
+            <label class="custom-control-label" for="published">是否发布</label>
+        </div>
+    </div>
+
+</form>
+
+
+</body>
+<!-- javascript -->
+<th:block th:replace="_fragment :: _javascript">
+    <script src="../static/jquery/jquery-3.4.1.min.js" th:src="@{/jquery/jquery-3.4.1.min.js}"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</th:block>
+<!-- javascript -->
+</html>

@@ -83,7 +83,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="user : ${pageInfo.list}">
+                <tr th:each="user : ${pageInfoUser.list}">
                     <th scope="row" th:text="${user?.id}" class="align-middle admin-w-15">1</th>
                     <td th:text="${user?.username}" class="align-middle admin-w-15">张三</td>
                     <td th:text="${user?.email}" class="align-middle admin-w-30">695875276@qq.com</td>
@@ -106,21 +106,21 @@
             </table>
             <div class="mt-lg-4" style="width: 100%;">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item" th:classappend="${pageInfo.isFirstPage}?'disabled':''">
-                        <a th:href="@{/user/list(pageNum=${pageInfo.hasPreviousPage}?${pageInfo.prePage}:1)}"
+                    <li class="page-item" th:classappend="${pageInfoUser.isFirstPage}?'disabled':''">
+                        <a th:href="@{/user/list(pageNum=${pageInfoUser.hasPreviousPage}?${pageInfoUser.prePage}:1)}"
                            class="page-link" href="#" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="#" th:text="${pageInfo.pageNum}">1</a></li>
-                    <li class="page-item" th:classappend="${pageInfo.isLastPage}?'disabled':''">
-                        <a th:href="@{/user/list(pageNum=${pageInfo.hasNextPage}?${pageInfo.nextPage}:${pageInfo.pages})}"
+                    <li class="page-item"><a class="page-link" href="#" th:text="${pageInfoUser.pageNum}">1</a></li>
+                    <li class="page-item" th:classappend="${pageInfoUser.isLastPage}?'disabled':''">
+                        <a th:href="@{/user/list(pageNum=${pageInfoUser.hasNextPage}?${pageInfoUser.nextPage}:${pageInfoUser.pages})}"
                            class="page-link" href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
                 </ul>
-                <div class="text-sm-center">当前第<span th:text="${pageInfo.pageNum}"></span>页 ｜ 共<span th:text="${pageInfo.pages}"></span>页</div>
+                <div class="text-sm-center">当前第<span th:text="${pageInfoUser.pageNum}"></span>页 ｜ 共<span th:text="${pageInfoUser.pages}"></span>页</div>
             </div>
         </div>
         <!-- 管理面板 -->

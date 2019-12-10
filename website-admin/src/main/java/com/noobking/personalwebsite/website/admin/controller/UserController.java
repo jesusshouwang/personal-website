@@ -40,8 +40,8 @@ public class UserController {
     public String userList(Model model, @RequestParam(defaultValue = "1", value = "pageNum") Integer pageNum) {
         ResponseResult<PageInfo<UserMainInfo>> responseResult = userService.getUserMainInfo(pageNum, 10);
         if (responseResult.getCode() == HttpStatus.OK.value()) {
-            PageInfo<UserMainInfo> pageInfo = responseResult.getData();
-            model.addAttribute("pageInfo", pageInfo);
+            PageInfo<UserMainInfo> pageInfoUser = responseResult.getData();
+            model.addAttribute("pageInfoUser", pageInfoUser);
         } else {
             model.addAttribute("responseResult", responseResult);
         }

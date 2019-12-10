@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.noobking.personalwebsite.website.admin.mapper.ArticleMapper">
+    <sql id="articleAllInfo">
+        a.id,
+        a.title,
+        a.description,
+        a.content,
+        a.views,
+        a.appreciation,
+        a.share,
+        a.comment,
+        a.recommendation,
+        a.published,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        b.id AS "type.id",
+        b.name AS "type.name",
+        b.status AS "type.status",
+        c.id AS "user.id",
+        c.username AS "user.username",
+        c.email AS "user.email",
+        c.rights AS "user.rights"
+    </sql>
+    <sql id="articleJoins">
+        LEFT JOIN `type` AS b ON a.type_id = b.id
+        LEFT JOIN `user` AS c ON a.user_id = c.id
+    </sql>
+
+    <select id="getArticleById" resultType="Article">
+        SELECT
+            <include refid="articleAllInfo"></include>
+        FROM
+            article AS a
+            <include refid="articleJoins"></include>
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <select id="getAllArticleMainInfo" resultType="Article">
+        SELECT
+            a.id,
+            a.title,
+            a.published,
+            b.id AS "type.id",
+            b.name AS "type.name",
+            b.status AS "type.status",
+            c.id AS "user.id",
+            c.username AS "user.username",
+            c.email AS "user.email"
+        FROM
+            article AS a
+        <include refid="articleJoins"></include>
+    </select>
+
+    <insert id="insertArticle">
+        INSERT INTO
+            article(
+            type_id,
+            title,
+            description,
+            content,
+            user_id,
+            views,
+            appreciation,
+            share,
+            comment,
+            recommendation,
+            published,
+            create_time,
+            update_time
+            )VALUES (
+            #{type.id},
+            #{title},
+            #{description},
+            #{content},
+            #{user.id},
+            #{views},
+            #{appreciation},
+            #{share},
+            #{comment},
+            #{recommendation},
+            #{published},
+            #{createTime},
+            #{updateTime}
+            )
+    </insert>
+
+    <update id="updateArticle">
+        UPDATE
+            article
+        SET
+            type_id = #{type.id},
+            title = #{title},
+            description = #{description},
+            content = #{content},
+            views = #{views},
+            appreciation = #{appreciation},
+            share = #{share},
+            comment = #{comment},
+            recommendation = #{recommendation},
+            published = #{published},
+            update_time = #{updateTime}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="getArticleStatusInfoById" resultType="ArticleStatusInfo">
+        SELECT
+            a.id,
+            a.appreciation,
+            a.share,
+            a.comment,
+            a.recommendation,
+            a.published
+        FROM
+            article AS a
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <update id="updateArticleStatusInfo">
+        UPDATE
+            article
+        SET
+            appreciation = #{appreciation},
+            share = #{share},
+            comment = #{comment},
+            recommendation = #{recommendation},
+            published = #{published}
+        WHERE
+            id = #{id}
+    </update>
+
+    <delete id="deleteArticleById">
+        DELETE  FROM
+            article
+        WHERE
+            id = #{id}
+    </delete>
+</mapper>

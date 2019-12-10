@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>添加文章</title>
+    <!-- css -->
+    <th:block th:replace="_fragment :: _css">
+        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css"
+              th:href="@{/bootstrap/css/bootstrap.min.css}">
+        <link rel="stylesheet" href="../static/css/admin.css" th:href="@{/css/admin.css}">
+    </th:block>
+    <link rel="stylesheet" href="../static/plugin/editormd/css/editormd.min.css"
+          th:href="@{/plugin/editormd/css/editormd.min.css}">
+    <!-- css -->
+</head>
+<body>
+<!-- 导航条 -->
+<nav th:replace="_fragment :: _menu(2)" class="navbar navbar-expand-lg navbar-light"
+     style="background-color: #e3f2fd;box-shadow: 0 0 10px #e3f2fd;">
+    <a class="navbar-brand" href="/admin/main" th:href="@{/admin/main}">个人网站</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#">用户管理<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">文章管理</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">推荐站点</a>
+            </li>
+        </ul>
+    </div>
+    <div class="dropdown dropdown-header">
+        <a th:text="${session?.loginUser?.username}" class="nav-link dropdown-toggle" href="#"
+           id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            username
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">权限</a>
+            <a class="dropdown-item" href="#">用户信息</a>
+            <a class="dropdown-item" href="#">上次登陆：<p
+                    th:text="${#dates.format(session?.loginUser?.lastLoginTime, 'yyyy-MM-dd HH:mm:ss')}"></p></a>
+            <a class="dropdown-item" href="/user/logout" th:href="@{/user/logout}">注销</a>
+        </div>
+    </div>
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</nav>
+<!-- 导航条 -->
+<!-- 面包屑导航 -->
+<nav aria-label="breadcrumb" style="box-shadow: 0 0 10px #909399;">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item" aria-current="page"><a href="/admin/main" th:href="@{/admin/main}">首页</a></li>
+        <li class="breadcrumb-item"><a href="/article/list" th:href="@{/article/list}">文章管理</a></li>
+        <li class="breadcrumb-item active">内容管理</li>
+    </ol>
+</nav>
+<!-- 面包屑导航 -->
+<main class="container">
+    <form id="addAritcleForm" action="/article/add" method="post">
+
+        <div class="form-group">
+            <input name="title" class="form-control shadow-sm rounded" placeholder="标题" required maxlength="50" th:value="${articleAllInfo?.title}" />
+            <input name="id" type="hidden" th:value="${articleAllInfo?.id}" />
+            <input name="published" type="hidden" th:value="${articleAllInfo?.published}" />
+            <input name="user.id" th:value="${session.loginUser.id}" type="hidden" th:unless="${articleAllInfo != null}" />
+        </div>
+
+        <div class="form-group">
+            <div id="editArticleContent" class="shadow-sm rounded">
+                <textarea name="content" id="content" style="display: none"  th:text="${articleAllInfo?.content}"></textarea>
+            </div>
+        </div>
+
+        <!--        <div class="form-group form-row">-->
+        <!--            <select class="custom-select" multiple name="type.id">-->
+        <!--                <option selected value="-1" >请选择分类</option>-->
+        <!--                <option th:each="type : ${allTypeInfoList}"  th:value="${type.id}" th:text="${type.name}" th:unless="${!type.status}">One</option>-->
+
+        <!--            </select>-->
+        <!--        </div>-->
+        <div class="form-group border-top border-primary rounded">
+            <div class="card">
+                <div class="card-header">权限配置</div>
+                <div class="card-body">
+                    <div class="custom-control custom-switch custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" id="appreciation" name="appreciation" th:checked="${articleAllInfo?.appreciation}" >
+                        <label class="custom-control-label" for="appreciation">允许赞赏</label>
+                    </div>
+
+                    <div class="custom-control custom-switch custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" id="share" name="share" th:checked="${articleAllInfo?.share}" >
+                        <label class="custom-control-label" for="share">允许分享</label>
+                    </div>
+
+                    <div class="custom-control custom-switch custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" id="comment" name="comment" th:checked="${articleAllInfo?.comment}" >
+                        <label class="custom-control-label" for="comment">允许评论</label>
+                    </div>
+
+                    <div class="custom-control custom-switch custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" id="recommendation" name="recommendation" th:checked="${articleAllInfo?.recommendation}" >
+                        <label class="custom-control-label" for="recommendation">首页推荐</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group border-top border-primary rounded">
+            <div class="card">
+                <div class="card-header">分类选择</div>
+                <div class="card-body">
+                    <div class="custom-control custom-radio custom-control-inline" th:each="type : ${allTypeInfoList}"
+                         th:unless="${!type.status}">
+                        <input required type="radio" th:id="${type.id}" name="type.id" class="custom-control-input"
+                               th:value="${type.id}" th:checked="${articleAllInfo?.type?.id} == ${type.id}" >
+                        <label class="custom-control-label" th:for="${type.id}" th:text="${type.name}"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group float-right">
+            <button type="button" class="btn btn-outline-secondary" onclick="window.history.go(-1)">取消</button>
+            <button onclick="addAritcleFormSave();" class="btn btn-outline-info" >保存</button>
+            <button onclick="addAritcleFormSubmit();" class="btn btn-outline-primary">发布</button>
+        </div>
+
+    </form>
+</main>
+</body>
+<!-- javascript -->
+<th:block th:replace="_fragment :: _javascript">
+    <script src="../static/jquery/jquery-3.4.1.min.js" th:src="@{/jquery/jquery-3.4.1.min.js}"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</th:block>
+<script src="../static/plugin/editormd/editormd.min.js" th:src="@{/plugin/editormd/editormd.min.js}"></script>
+<!-- javascript -->
+
+<script>
+    //表单
+    let addAritcleForm = $('#addAritcleForm');
+    //md编辑器
+    let editArticleContent;
+    $(function () {
+        editArticleContent = editormd("editArticleContent", {
+            width: "100%",
+            height: "700",
+            placeholder: "请键入markdown语法的内容...",
+            syncScrolling: "single",
+            path: "/plugin/editormd/lib/"
+        });
+    });
+
+    function addAritcleFormSubmit() {
+        let flag = confirm("发布该文章");
+        if (flag) {
+            $('[name="published"]').val(true);
+            addAritcleForm.submit();
+        } else {
+            addAritcleFormSave();
+        }
+    }
+
+    function addAritcleFormSave() {
+        let flag = confirm("正在保存... \n未避免丢失，保存的文章也会上传至服务器！");
+        if (flag) {
+            $('[name="published"]').val(false);
+            addAritcleForm.submit();
+        }
+    }
+</script>
+</html>

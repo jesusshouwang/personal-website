@@ -55,9 +55,14 @@
 }
 
 /*宽度*/
-.admin-w-15{
-    width:15%!important;
+.admin-w-10 {
+    width: 10% !important;
 }
-.admin-w-30{
-    width:30%!important;
+
+.admin-w-15 {
+    width: 15% !important;
+}
+
+.admin-w-30 {
+    width: 30% !important;
 }

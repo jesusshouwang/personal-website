@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文章管理</title>
+    <!-- css -->
+    <th:block th:replace="_fragment :: _css">
+        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css"
+              th:href="@{/bootstrap/css/bootstrap.min.css}">
+        <link rel="stylesheet" href="../static/css/admin.css" th:href="@{/css/admin.css}">
+    </th:block>
+
+</head>
+<body>
+<!-- 导航条 -->
+<nav th:replace="_fragment :: _menu(2)" class="navbar navbar-expand-lg navbar-light"
+     style="background-color: #e3f2fd;box-shadow: 0 0 10px #e3f2fd;">
+    <a class="navbar-brand" href="/admin/main" th:href="@{/admin/main}">个人网站</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">用户管理<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">文章管理</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">推荐站点</a>
+            </li>
+        </ul>
+    </div>
+    <div class="dropdown dropdown-header">
+        <a th:text="${session?.loginUser?.username}" class="nav-link dropdown-toggle" href="#"
+           id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            username
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">管理员信息</a>
+            <a class="dropdown-item" href="#">上次登陆：<p
+                    th:text="${#dates.format(session?.loginUser?.lastLoginTime, 'yyyy-MM-dd HH:mm:ss')}"></p></a>
+            <a class="dropdown-item" href="/user/logout" th:href="@{/user/logout}">注销</a>
+        </div>
+    </div>
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="查找..." aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">查找</button>
+    </form>
+</nav>
+<!-- 导航条 -->
+
+<!-- 面包屑导航 -->
+<nav aria-label="breadcrumb" style="box-shadow: 0 0 10px #909399;">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/main" th:href="@{/admin/main}">首页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">文章管理</li>
+    </ol>
+</nav>
+<!-- 面包屑导航 -->
+
+<main class="container">
+    <div class="admin-content admin-padding-lrtb-small">
+        <div th:class="${responseResult.code == 200} ? 'alert alert-success' : 'alert alert-danger'"
+             th:unless="${responseResult == null}" th:text="${responseResult.message}"></div>
+        <a href="/article/add" th:href="@{/article/add}" class="btn btn-sm btn-outline-primary">新增</a>
+        <!-- 管理面板 -->
+        <div class="row admin-padding-lrtb-small">
+            <table class="table table-sm table-hover w-100">
+                <thead>
+                <tr>
+                    <th scope="col" class="align-middle">文章编号</th>
+                    <th scope="col" class="align-middle">分类</th>
+                    <th scope="col" class="align-middle">标题</th>
+                    <th scope="col" class="align-middle">作者</th>
+                    <th scope="col" class="align-middle">状态</th>
+                    <th scope="col" class="align-middle">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="article : ${pageinfoAritcle.list}">
+                    <th scope="row" th:text="${article?.id}" class="align-middle admin-w-10">1</th>
+                    <td th:text="${article?.type?.name}" class="align-middle admin-w-10">类型</td>
+                    <td th:text="${article?.title}" class="align-middle admin-w-30">标题</td>
+                    <td th:text="${article?.user?.username}" class="align-middle admin-w-15">作者</td>
+                    <td class="align-middle admin-w-15"><a th:onclick="'editStatus(' + ${article?.id} + ');'"
+                                                           class="badge"
+                                                           href="#"
+                                                           th:classappend="${article?.published}?'badge-primary':'badge-secondary'"
+                                                           th:text="${article?.published}?'已发布':'未发布'"
+                                                           data-toggle="modal"
+                                                           data-target="#modal-common"></a></td>
+                    <td class="align-middle">
+                        <button th:onclick="" type="button"
+                                class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-common">
+                            查看
+                        </button>
+                        <a href="/article/add" th:href="@{/article/add(id=${article?.id})}"
+                           class="btn btn-sm btn-outline-primary">编辑</a>
+                        <button th:onclick="'delArticle(' + ${article?.id} + ');'" type="button"
+                                class="btn btn-sm btn-outline-danger">删除
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="mt-lg-4" style="width: 100%;">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${pageinfoAritcle.isFirstPage}?'disabled':''">
+                        <a th:href="@{/article/list(pageNum=${pageinfoAritcle.hasPreviousPage}?${pageinfoAritcle.prePage}:1)}"
+                           class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#" th:text="${pageinfoAritcle.pageNum}">1</a></li>
+                    <li class="page-item" th:classappend="${pageinfoAritcle.isLastPage}?'disabled':''">
+                        <a th:href="@{/article/list(pageNum=${pageinfoAritcle.hasNextPage}?${pageinfoAritcle.nextPage}:${pageinfoAritcle.pages})}"
+                           class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="text-sm-center">当前第<span th:text="${pageinfoAritcle.pageNum}"></span>页 ｜ 共<span
+                        th:text="${pageinfoAritcle.pages}"></span>页
+                </div>
+            </div>
+        </div>
+        <!-- 管理面板 -->
+    </div>
+</main>
+
+<th:block th:replace="_fragment :: _modal"></th:block>
+</body>
+<!-- javascript -->
+<th:block th:replace="_fragment :: _javascript">
+    <script src="../static/jquery/jquery-3.4.1.min.js" th:src="@{/jquery/jquery-3.4.1.min.js}"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</th:block>
+<!-- javascript -->
+<script>
+    //用户详细信息
+    function getUserAllInfo(id) {
+        $.ajax({
+            type: "get",
+            url: "http://localhost:9000/user/info?id=" + id,
+            dataType: "html",
+            success: function (data) {
+                $('#modal-title').text("用户信息");
+                $('#modal-body').html(data);
+                $('#modal-footer').html("<button type='button' class='btn btn-secondary' data-dismiss='modal'>返回</button>");
+            }
+        });
+    }
+
+    function editStatus(id) {
+        $.ajax({
+            type: "get",
+            url: "http://localhost:9000/article/status?id=" + id,
+            dataType: "html",
+            success: function (data) {
+                $('#modal-title').text("文章状态管理");
+                $('#modal-body').html(data);
+                $('#modal-footer').html("<button type='button' class='btn btn-outline-secondary' data-dismiss='modal'>返回</button><button onclick='postEditArticleStatusForm();' type='button' class='btn btn-outline-primary'>提交</button>");
+            }
+        })
+    }
+
+    function postEditArticleStatusForm() {
+        $.ajax({
+            type: "post",
+            url: "http://localhost:9000/article/status",
+            data: $('#editArticleStatusForm').serialize(),
+            success: function (data) {
+                if (data.code === 200) {
+                    alert(data.message);
+                    setTimeout(window.location.href = 'http://localhost:9000/article/list', 1);
+                } else {
+                    alert(data.message)
+                }
+            }
+        });
+    }
+
+    function delArticle(id) {
+        let flag = confirm("确认删除文章吗？");
+        if (flag) {
+            $.ajax({
+                type: "get",
+                url: "http://localhost:9000/article/del/" + id,
+                success: function (data) {
+                    if (data.code === 200) {
+                        alert(data.message);
+                        setTimeout(window.location.href = 'http://localhost:9000/article/list', 1);
+                    } else {
+                        alert(data.message)
+                    }
+                }
+            });
+        }
+    }
+</script>
+</html>

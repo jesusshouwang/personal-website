@@ -47,9 +47,9 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public ResponseResult<PageInfo<UserMainInfo>> getUserMainInfo(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
-        PageInfo<UserMainInfo> pageInfo = new PageInfo<UserMainInfo>(userMapper.getAllUserMainInfo(pageNum,pageSize));
-        return new ResponseResult<PageInfo<UserMainInfo>>(HttpStatus.OK.value(),"获取用户成功",pageInfo);
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<UserMainInfo> pageInfo = new PageInfo<UserMainInfo>(userMapper.getAllUserMainInfo(pageNum, pageSize));
+        return new ResponseResult<PageInfo<UserMainInfo>>(HttpStatus.OK.value(), "获取用户成功", pageInfo);
     }
 
     @Override
