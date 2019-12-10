@@ -1,5 +1,7 @@
 package com.noobking.personalwebsite.website.admin.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.noobking.personalwebsite.common.dto.ResponseResult;
 import com.noobking.personalwebsite.domain.User;
 import com.noobking.personalwebsite.domain.dto.UserMainInfo;
@@ -44,12 +46,10 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public ResponseResult<List<UserMainInfo>> getUserMainInfo() {
-        List<UserMainInfo> userMainInfo = userMapper.getAllUserMainInfo();
-        if (userMainInfo.isEmpty()) {
-            return new ResponseResult<List<UserMainInfo>>(HttpStatus.NOT_FOUND.value(), "无用户", null);
-        }
-        return new ResponseResult<List<UserMainInfo>>(HttpStatus.OK.value(), "获取用户成功", userMainInfo);
+    public ResponseResult<PageInfo<UserMainInfo>> getUserMainInfo(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        PageInfo<UserMainInfo> pageInfo = new PageInfo<UserMainInfo>(userMapper.getAllUserMainInfo(pageNum,pageSize));
+        return new ResponseResult<PageInfo<UserMainInfo>>(HttpStatus.OK.value(),"获取用户成功",pageInfo);
     }
 
     @Override

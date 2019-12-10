@@ -84,6 +84,13 @@
             <artifactId>jbcrypt</artifactId>
         </dependency>
         <!-- password jbcrypt -->
+
+        <!-- pagehelper Begin -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- pagehelper End -->
     </dependencies>
 
     <build>

@@ -1,5 +1,6 @@
 package com.noobking.personalwebsite.website.admin.service;
 
+import com.github.pagehelper.PageInfo;
 import com.noobking.personalwebsite.common.dto.ResponseResult;
 import com.noobking.personalwebsite.domain.User;
 import com.noobking.personalwebsite.domain.dto.UserMainInfo;
@@ -24,7 +25,7 @@ public interface UserService {
      *
      * @return
      */
-    ResponseResult<List<UserMainInfo>> getUserMainInfo();
+    ResponseResult<PageInfo<UserMainInfo>> getUserMainInfo(int pageNum, int pageSize);
 
     /**
      * 更新用户权限

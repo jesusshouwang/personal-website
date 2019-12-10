@@ -53,3 +53,11 @@
 .admin-user-info-td {
     overflow: auto;
 }
+
+/*宽度*/
+.admin-w-15{
+    width:15%!important;
+}
+.admin-w-30{
+    width:30%!important;
+}

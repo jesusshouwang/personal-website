@@ -1,7 +1,10 @@
 package com.noobking.personalwebsite.website.admin.controller;
 
+import com.github.pagehelper.PageInfo;
+import com.noobking.personalwebsite.common.constant.SystemConstant;
 import com.noobking.personalwebsite.common.dto.ResponseResult;
 import com.noobking.personalwebsite.domain.User;
+import com.noobking.personalwebsite.domain.dto.LoginUserInfo;
 import com.noobking.personalwebsite.domain.dto.UserMainInfo;
 import com.noobking.personalwebsite.domain.dto.UserRights;
 import com.noobking.personalwebsite.website.admin.service.UserService;
@@ -11,9 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -32,13 +37,13 @@ public class UserController {
      * @return
      */
     @GetMapping(value = "/user/list")
-    public String userList(Model model) {
-        ResponseResult<List<UserMainInfo>> responseResult = userService.getUserMainInfo();
+    public String userList(Model model, @RequestParam(defaultValue = "1", value = "pageNum") Integer pageNum) {
+        ResponseResult<PageInfo<UserMainInfo>> responseResult = userService.getUserMainInfo(pageNum, 10);
         if (responseResult.getCode() == HttpStatus.OK.value()) {
-            List<UserMainInfo> userMainInfoList = responseResult.getData();
-            model.addAttribute("userMainInfoList", userMainInfoList);
+            PageInfo<UserMainInfo> pageInfo = responseResult.getData();
+            model.addAttribute("pageInfo", pageInfo);
         } else {
-            model.addAttribute("responseResult",responseResult);
+            model.addAttribute("responseResult", responseResult);
         }
         return "user_management";
     }
@@ -82,8 +87,16 @@ public class UserController {
      * @return
      */
     @PostMapping("/user/edit")
-    public String editUser(UserRights userRights, RedirectAttributes redirectAttributes) {
-        ResponseResult<Void> responseResult = userService.updateUserRights(userRights);
+    public String editUser(UserRights userRights, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        ResponseResult<Void> responseResult = new ResponseResult<Void>(HttpStatus.NOT_FOUND.value(), "没有找到", null);
+        LoginUserInfo loginUser = (LoginUserInfo) request.getSession().getAttribute(SystemConstant.LOGIN_USER);
+        if (loginUser.getId() == userRights.getId()) {
+            responseResult.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            responseResult.setMessage("不能操作自己");
+            redirectAttributes.addFlashAttribute("responseResult", responseResult);
+            return "redirect:/user/list";
+        }
+        responseResult = userService.updateUserRights(userRights);
         if (responseResult.getCode() == HttpStatus.OK.value()) {
             redirectAttributes.addFlashAttribute("responseResult", responseResult);
             return "redirect:/user/list";
@@ -111,6 +124,7 @@ public class UserController {
     @ResponseBody
     @PostMapping("/user/add")
     public ResponseResult<Void> addUser(User user) {
+        //这里简易验证一下
         if (user.getUsername() == null || "".equals(user.getUsername())) {
             return new ResponseResult<Void>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "用户名错误");
         }
@@ -129,13 +143,23 @@ public class UserController {
 
     /**
      * 删除用户
+     *
      * @param id
+     * @param request
      * @param redirectAttributes
      * @return
      */
     @GetMapping("/user/delete")
-    public String delUser(Long id, RedirectAttributes redirectAttributes) {
-        ResponseResult<Void> responseResult = userService.deleteUser(id);
+    public String delUser(Long id, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        ResponseResult<Void> responseResult = new ResponseResult<Void>(HttpStatus.NOT_FOUND.value(), "没有找到", null);
+        LoginUserInfo loginUser = (LoginUserInfo) request.getSession().getAttribute(SystemConstant.LOGIN_USER);
+        if (loginUser.getId() == id) {
+            responseResult.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            responseResult.setMessage("不能操作自己");
+            redirectAttributes.addFlashAttribute("responseResult", responseResult);
+            return "redirect:/user/list";
+        }
+        responseResult = userService.deleteUser(id);
         if (responseResult.getCode() == HttpStatus.OK.value()) {
             redirectAttributes.addFlashAttribute("responseResult", responseResult);
             return "redirect:/user/list";

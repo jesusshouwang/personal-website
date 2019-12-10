@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登陆</title>
+    <!-- css -->
+    <th:block th:replace="_fragment :: _css">
+        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css"
+              th:href="@{/bootstrap/css/bootstrap.min.css}">
+        <link rel="stylesheet" href="../static/css/admin.css" th:href="@{/css/admin.css}">
+    </th:block>
+    <!-- css -->
+</head>
+<body>
+
+<form id="editUserForm" method="post" action="/user/edit" th:action="@{/user/edit}">
+    <div class="row">
+        <div class="col-4">
+            <input type="hidden" name="id" th:value="${userAllInfo.id}"/>
+            当前用户：<span th:text="${userAllInfo.username}"></span>
+        </div>
+        <div class="col-8">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="rights" name="rights"
+                       th:checked="${userAllInfo.rights}">
+                <label class="custom-control-label" for="rights">后台登陆权限</label>
+            </div>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="status" name="status"
+                       th:checked="${userAllInfo.status}">
+                <label class="custom-control-label" for="status">账户活跃状态</label>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+</body>
+<!-- javascript -->
+<th:block th:replace="_fragment :: _javascript">
+    <script src="../static/jquery/jquery-3.4.1.min.js" th:src="@{/jquery/jquery-3.4.1.min.js}"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</th:block>
+<!-- javascript -->
+</html>

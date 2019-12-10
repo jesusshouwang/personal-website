@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>主页</title>
+    <!-- css -->
+    <th:block th:replace="_fragment :: _css">
+        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css"
+              th:href="@{/bootstrap/css/bootstrap.min.css}">
+        <link rel="stylesheet" href="../static/css/admin.css" th:href="@{/css/admin.css}">
+    </th:block>
+
+</head>
+<body>
+<!-- 导航条 -->
+<nav th:replace="_fragment :: _menu(1)" class="navbar navbar-expand-lg navbar-light"
+     style="background-color: #e3f2fd;box-shadow: 0 0 10px #e3f2fd;">
+    <a class="navbar-brand" href="/admin/main" th:href="@{/admin/main}">个人网站</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">用户管理<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">文章管理</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">推荐站点</a>
+            </li>
+        </ul>
+    </div>
+    <div class="dropdown dropdown-header">
+        <a th:text="${session?.loginUser?.username}" class="nav-link dropdown-toggle" href="#"
+           id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            username
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">权限</a>
+            <a class="dropdown-item" href="#">用户信息</a>
+            <a class="dropdown-item" href="#">上次登陆：<p
+                    th:text="${#dates.format(session?.loginUser?.lastLoginTime, 'yyyy-MM-dd HH:mm:ss')}"></p></a>
+            <a class="dropdown-item" href="/user/logout" th:href="@{/user/logout}">注销</a>
+        </div>
+    </div>
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</nav>
+<!-- 导航条 -->
+
+<!-- 面包屑导航 -->
+<nav aria-label="breadcrumb" style="box-shadow: 0 0 10px #909399;">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/main" th:href="@{/admin/main}">首页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">用户管理</li>
+    </ol>
+</nav>
+<!-- 面包屑导航 -->
+<main class="container">
+    <div class="admin-content admin-padding-lrtb-small">
+        <div th:class="${responseResult.code == 200} ? 'alert alert-success' : 'alert alert-danger'"
+             th:unless="${responseResult == null}" th:text="${responseResult.message}"></div>
+        <a href="#" onclick="addUser();" class="btn btn-sm btn-outline-primary" data-toggle="modal"
+           data-target="#modal-common">新增</a>
+        <!-- 管理面板 -->
+        <div class="row admin-padding-lrtb-small">
+            <table class="table table-sm table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" class="align-middle">用户编号</th>
+                    <th scope="col" class="align-middle">用户名</th>
+                    <th scope="col" class="align-middle">邮箱</th>
+                    <th scope="col" class="align-middle">权限</th>
+                    <th scope="col" class="align-middle">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${pageInfo.list}">
+                    <th scope="row" th:text="${user?.id}" class="align-middle admin-w-15">1</th>
+                    <td th:text="${user?.username}" class="align-middle admin-w-15">张三</td>
+                    <td th:text="${user?.email}" class="align-middle admin-w-30">695875276@qq.com</td>
+                    <td th:text="${user?.rights?'管理员':'用户'}" class="align-middle admin-w-15">超级管理员</td>
+                    <td class="align-middle">
+                        <button th:onclick="'getUserAllInfo('+ ${user.id} +');'" type="button"
+                                class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-common">
+                            查看
+                        </button>
+                        <button th:onclick="'editUser('+ ${user.id} +');'" type="button"
+                                class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-common">
+                            编辑
+                        </button>
+                        <button th:onclick="'delUser('+ ${user.id} +');'" type="button"
+                                class="btn btn-sm btn-outline-danger">删除
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="mt-lg-4" style="width: 100%;">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${pageInfo.isFirstPage}?'disabled':''">
+                        <a th:href="@{/user/list(pageNum=${pageInfo.hasPreviousPage}?${pageInfo.prePage}:1)}"
+                           class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#" th:text="${pageInfo.pageNum}">1</a></li>
+                    <li class="page-item" th:classappend="${pageInfo.isLastPage}?'disabled':''">
+                        <a th:href="@{/user/list(pageNum=${pageInfo.hasNextPage}?${pageInfo.nextPage}:${pageInfo.pages})}"
+                           class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="text-sm-center">当前第<span th:text="${pageInfo.pageNum}"></span>页 ｜ 共<span th:text="${pageInfo.pages}"></span>页</div>
+            </div>
+        </div>
+        <!-- 管理面板 -->
+    </div>
+</main>
+
+<th:block th:replace="_fragment :: _modal"></th:block>
+</body>
+<!-- javascript -->
+<th:block th:replace="_fragment :: _javascript">
+    <script src="../static/jquery/jquery-3.4.1.min.js" th:src="@{/jquery/jquery-3.4.1.min.js}"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</th:block>
+<!-- javascript -->
+<script>
+    //用户详细信息
+    function getUserAllInfo(id) {
+        $.ajax({
+            type: "get",
+            url: "http://localhost:9000/user/info?id=" + id,
+            dataType: "html",
+            success: function (data) {
+                $('#modal-title').text("用户信息");
+                $('#modal-body').html(data);
+                $('#modal-footer').html("<button type='button' class='btn btn-secondary' data-dismiss='modal'>返回</button>");
+            }
+        });
+    }
+
+    //编辑用户
+    function editUser(id) {
+        $.ajax({
+            type: "get",
+            url: "http://localhost:9000/user/edit?id=" + id,
+            dataType: "html",
+            success: function (data) {
+                $('#modal-title').text("编辑用户");
+                $('#modal-body').html(data);
+                $('#modal-footer').html("<button type='button' class='btn btn-secondary' data-dismiss='modal'>返回</button><button onclick='postEdit();' type='button' class='btn btn-secondary'>提交</button>");
+            }
+        })
+    }
+
+    //提交编辑用户
+    function postEdit() {
+        $('#editUserForm').submit();
+    }
+
+    function addUser() {
+        $.ajax({
+            type: "get",
+            url: "http://localhost:9000/user/add",
+            dataType: "html",
+            success: function (data) {
+                $('#modal-title').text("新增用户");
+                $('#modal-body').html(data);
+                $('#modal-footer').html("<button type='button' class='btn btn-secondary' data-dismiss='modal'>返回</button><button onclick='postAdd();' type='button' class='btn btn-secondary'>提交</button>");
+            }
+        });
+    }
+
+    //异步提交添加用户
+    function postAdd() {
+        $.ajax({
+            type: "post",
+            url: "http://localhost:9000/user/add",
+            data: $('#addUserForm').serialize(),
+            success: function (data) {
+                if (data.code == 200) {
+                    alert(data.message);
+                    setTimeout(window.location.href = 'http://localhost:9000/user/list', 1);
+                } else {
+                    alert(data.message)
+                }
+            }
+        });
+    }
+
+    //删除用户
+    function delUser(id) {
+        let flag = confirm("确定删除用户吗？");
+        if (flag) {
+            setTimeout(window.location.href = 'http://localhost:9000/user/delete?id=' + id, 1);
+        }
+    }
+</script>
+</html>

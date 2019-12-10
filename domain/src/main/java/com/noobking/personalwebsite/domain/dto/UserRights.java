@@ -11,6 +11,8 @@ public class UserRights implements Serializable {
 
     private boolean rights;
 
+    private boolean status;
+
     public Long getId() {
         return id;
     }
@@ -25,5 +27,13 @@ public class UserRights implements Serializable {
 
     public void setRights(boolean rights) {
         this.rights = rights;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

@@ -57,7 +57,8 @@
         UPDATE
             user
         SET
-            rights = #{rights}
+            rights = #{rights},
+            status = #{status}
         WHERE
             id = #{id}
     </update>
@@ -79,8 +80,8 @@
             #{avatar},
             #{username},
             #{password},
-            #{note},
             #{email},
+            #{note},
             #{rights},
             #{status},
             #{createTime},

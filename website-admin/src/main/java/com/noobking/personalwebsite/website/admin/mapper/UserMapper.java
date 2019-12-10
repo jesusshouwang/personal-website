@@ -34,7 +34,7 @@ public interface UserMapper {
      *
      * @return
      */
-    List<UserMainInfo> getAllUserMainInfo();
+    List<UserMainInfo> getAllUserMainInfo(int pageNum, int pageSize);
 
     /**
      * 更新用户登陆时间

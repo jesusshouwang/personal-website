@@ -1,5 +1,6 @@
 package com.noobking.personalwebsite.website.admin.controller;
 
+import com.noobking.personalwebsite.common.constant.SystemConstant;
 import com.noobking.personalwebsite.common.dto.ResponseResult;
 import com.noobking.personalwebsite.domain.dto.LoginUserInfo;
 import com.noobking.personalwebsite.website.admin.dto.LoginParam;
@@ -35,16 +36,16 @@ public class LoginController {
         //如果登陆成功
         if (loginInfo.getCode() == HttpStatus.OK.value()) {
             LoginUserInfo data = loginInfo.getData();
-            request.getSession().setAttribute("loginUser", data);
+            request.getSession().setAttribute(SystemConstant.LOGIN_USER, data);
             return "redirect:/admin/main";
         }
         model.addAttribute("ResponseResult", loginInfo);
-        model.addAttribute("loginParam",loginParam);
+        model.addAttribute("loginParam", loginParam);
         return "login";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request){
+    public String logout(HttpServletRequest request) {
         request.getSession().invalidate();
         return "redirect:/user/login";
     }

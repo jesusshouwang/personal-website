@@ -12,6 +12,7 @@
     <properties>
         <mybatis.version>2.1.1</mybatis.version>
         <jbcrypt.version>0.4</jbcrypt.version>
+        <pagehelper.version>1.2.13</pagehelper.version>
     </properties>
 
     <dependencyManagement>
@@ -25,6 +26,11 @@
                 <groupId>org.mindrot</groupId>
                 <artifactId>jbcrypt</artifactId>
                 <version>${jbcrypt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
