@@ -18,14 +18,14 @@
 <body>
 
 <!-- 导航条 -->
-<nav th:fragment="_menu(n)" class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;box-shadow: 0 0 10px #e3f2fd;">
+<nav th:fragment="_menu(n)" class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #e3f2fd;box-shadow: 0 0 10px #e3f2fd;">
     <a class="navbar-brand" href="/admin/main" th:href="@{/admin/main}">个人网站</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
                 <a class="nav-link" th:classappend="${n==1} ? 'active'" href="/user/list" th:href="@{/user/list}">用户管理<span class="sr-only">(current)</span></a>
             </li>
@@ -36,32 +36,31 @@
                 <a class="nav-link" th:classappend="${n==3} ? 'active'" href="/website/list" th:href="@{/website/list}">推荐站点</a>
             </li>
         </ul>
-    </div>
-    <div class="dropdown dropdown-header">
-        <a th:text="${session?.loginUser?.username}" class="nav-link dropdown-toggle" href="#"
-           id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            username
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">权限</a>
-            <a class="dropdown-item" href="#" th:onclick="'getUserAllInfo('+ ${session?.loginUser?.id} +');'" data-toggle="modal" data-target="#modal-common">我的信息</a>
-            <a class="dropdown-item" href="#">上次登陆：<p
-                    th:text="${#dates.format(session?.loginUser?.lastLoginTime, 'yyyy-MM-dd HH:mm:ss')}"></p></a>
-            <a class="dropdown-item" href="/user/logout" th:href="@{/user/logout}">注销</a>
+        <form class="form-inline my-2 my-lg-0 admin-padding-lrtb-small">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <div class="btn-group">
+            <button data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="${session?.loginUser?.username}" class="btn text-light btn-outline-dark btn-sm" type="button">
+                username
+            </button>
+            <div class="dropdown-menu dropdown-menu-lg-right">
+                <a class="dropdown-item" href="#">权限</a>
+                <a class="dropdown-item" href="#" th:onclick="'getUserAllInfo('+ ${session?.loginUser?.id} +');'" data-toggle="modal" data-target="#modal-common">我的信息</a>
+                <a class="dropdown-item" href="#">上次登陆：<p
+                        th:text="${#dates.format(session?.loginUser?.lastLoginTime, 'yyyy-MM-dd HH:mm:ss')}"></p></a>
+                <a class="dropdown-item" href="/user/logout" th:href="@{/user/logout}">注销</a>
+            </div>
         </div>
     </div>
-    <form class="form-inline">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
 </nav>
 <!-- 导航条 -->
 
 <!-- 模态框 -->
 <!-- Modal -->
 <th:block th:fragment="_modal">
-<div class="modal fade" id="modal-common" tabindex="-1" role="dialog" aria-labelledby="modal-common" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="modal-common" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modal-common" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-title">获取标题失败</h5>

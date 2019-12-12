@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>主页</title>
+    <title>推荐站点管理</title>
     <!-- css -->
     <th:block th:replace="_fragment :: _css">
         <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css"
@@ -16,7 +16,7 @@
 </head>
 <body>
 <!-- 导航条 -->
-<nav th:replace="_fragment :: _menu(1)" class="navbar navbar-expand-lg navbar-light"
+<nav th:replace="_fragment :: _menu(3)" class="navbar navbar-expand-lg navbar-light"
      style="background-color: #e3f2fd;box-shadow: 0 0 10px #e3f2fd;">
     <a class="navbar-brand" href="/admin/main" th:href="@{/admin/main}">个人网站</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
@@ -60,69 +60,56 @@
 <div class="float-right" style="margin-right: 15px">
     <ol class="breadcrumb bg-transparent">
         <li class="breadcrumb-item"><a href="/admin/main" class="font-italic" th:href="@{/admin/main}">首页</a></li>
-        <li class="breadcrumb-item active font-italic" aria-current="page">用户管理</li>
+        <li class="breadcrumb-item active font-italic" aria-current="page">推荐站点管理</li>
     </ol>
 </div>
 <!-- 面包屑导航 -->
+
 <main class="container">
     <div class="admin-content admin-padding-lrtb-small">
-        <div th:class="${responseResult.code == 200} ? 'alert alert-success' : 'alert alert-danger'"
-             th:unless="${responseResult == null}" th:text="${responseResult.message}"></div>
-        <a href="#" onclick="addUser();" class="btn btn-sm btn-outline-primary" data-toggle="modal"
-           data-target="#modal-common">新增</a>
+        <div th:class="${responseResult?.code == 200} ? 'alert alert-success' : 'alert alert-danger'"
+             th:unless="${responseResult == null}" th:text="${responseResult?.message}"></div>
         <!-- 管理面板 -->
+        <a href="#" onclick="addWebsite();" class="btn btn-sm btn-outline-primary" data-toggle="modal"
+           data-target="#modal-common">新增</a>
         <div class="row admin-padding-lrtb-small">
             <div class="table-responsive">
-                <table class="table table-sm table-hover">
+                <table class="table table-sm table-hover w-100">
                     <thead>
                     <tr>
-                        <th scope="col" class="align-middle text-center text-nowrap">用户编号</th>
-                        <th scope="col" class="align-middle text-center text-nowrap">用户名</th>
-                        <th scope="col" class="align-middle text-center text-nowrap">邮箱</th>
-                        <th scope="col" class="align-middle text-center text-nowrap">权限</th>
+                        <th scope="col" class="align-middle text-center text-nowrap">站点编号</th>
+                        <th scope="col" class="align-middle text-center text-nowrap">站点名称</th>
+                        <th scope="col" class="align-middle text-center text-nowrap">链接</th>
+                        <th scope="col" class="align-middle text-center text-nowrap">优先级</th>
+                        <th scope="col" class="align-middle text-center text-nowrap">状态</th>
                         <th scope="col" class="align-middle text-center text-nowrap">操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="user : ${pageInfoUser.list}">
-                        <th scope="row" th:text="${user?.id}" class="align-middle admin-w-100 text-truncate text-center text-nowrap">1</th>
-                        <td th:text="${user?.username}" class="align-middle admin-w-100 text-truncate text-center text-nowrap">张三</td>
-                        <td th:text="${user?.email}" class="align-middle admin-w-100 text-truncate text-center text-nowrap">695875276@qq.com</td>
-                        <td th:text="${user?.rights?'管理员':'用户'}" class="align-middle admin-w-100 text-truncate text-center text-nowrap">超级管理员</td>
+                    <tr th:each="website : ${websiteList}">
+                        <th th:text="${website.id}" scope="row" class="align-middle admin-w-100 text-truncate text-center text-nowrap">1</th>
+                        <td th:text="${website.name}" class="align-middle admin-w-100 text-truncate text-center text-nowrap">张三</td>
+                        <td class="align-middle admin-w-200 text-truncate text-center text-nowrap">
+                            <a th:href="@{${website.url}}" th:text="${website.url}" target="_blank"></a>
+                        </td>
+                        <td th:text="${website.top}" class="align-middle admin-w-100 text-truncate text-center text-nowrap">优先级</td>
+                        <td class="align-middle admin-w-100 text-center text-nowrap"><a th:onclick="'editWebsite(' + ${website.id} + ');'"
+                                                               class="badge" href="#"
+                                                               th:classappend="${website?.status}?'badge-primary':'badge-secondary'"
+                                                               th:text="${website?.status}?'推荐中':'未推荐'" data-toggle="modal"
+                                                               data-target="#modal-common"></a></td>
                         <td class="align-middle text-truncate text-center text-nowrap">
-                            <button th:onclick="'getUserAllInfo('+ ${user.id} +');'" type="button"
-                                    class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-common">
-                                查看
+                            <button th:onclick="'editWebsite(' + ${website.id} + ');'" type="button"
+                                    class="btn btn-sm btn-outline-primary" data-toggle="modal"
+                                    data-target="#modal-common">编辑
                             </button>
-                            <button th:onclick="'editUser('+ ${user.id} +');'" type="button"
-                                    class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-common">
-                                编辑
-                            </button>
-                            <button th:onclick="'delUser('+ ${user.id} +');'" type="button"
+                            <button th:onclick="'delWebsite(' + ${website.id} + ');'" type="button"
                                     class="btn btn-sm btn-outline-danger">删除
                             </button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="mt-lg-4" style="width: 100%;">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" th:classappend="${pageInfoUser.isFirstPage}?'disabled':''">
-                        <a th:href="@{/user/list(pageNum=${pageInfoUser.hasPreviousPage}?${pageInfoUser.prePage}:1)}"
-                           class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#" th:text="${pageInfoUser.pageNum}">1</a></li>
-                    <li class="page-item" th:classappend="${pageInfoUser.isLastPage}?'disabled':''">
-                        <a th:href="@{/user/list(pageNum=${pageInfoUser.hasNextPage}?${pageInfoUser.nextPage}:${pageInfoUser.pages})}"
-                           class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-                <div class="text-sm-center">当前第<span th:text="${pageInfoUser.pageNum}"></span>页 ｜ 共<span th:text="${pageInfoUser.pages}"></span>页</div>
             </div>
         </div>
         <!-- 管理面板 -->
@@ -152,60 +139,79 @@
         });
     }
 
-    //编辑用户
-    function editUser(id) {
+    function addWebsite() {
         $.ajax({
             type: "get",
-            url: "http://localhost:9000/user/edit?id=" + id,
+            url: "http://localhost:9000/website/add",
             dataType: "html",
             success: function (data) {
-                $('#modal-title').text("编辑用户");
+                $('#modal-title').text("站点内容管理");
                 $('#modal-body').html(data);
-                $('#modal-footer').html("<button type='button' class='btn btn-outline-secondary' data-dismiss='modal'>返回</button><button onclick='postEdit();' type='button' class='btn btn-outline-primary'>提交</button>");
+                $('#modal-footer').html("<button type='button' class='btn btn-outline-secondary' data-dismiss='modal'>返回</button><button onclick='postWebsiteAdd();' type='button' class='btn btn-outline-primary'>提交</button>");
             }
         })
     }
 
-    //提交编辑用户
-    function postEdit() {
-        $('#editUserForm').submit();
-    }
-
-    function addUser() {
-        $.ajax({
-            type: "get",
-            url: "http://localhost:9000/user/add",
-            dataType: "html",
-            success: function (data) {
-                $('#modal-title').text("新增用户");
-                $('#modal-body').html(data);
-                $('#modal-footer').html("<button type='button' class='btn btn-outline-secondary' data-dismiss='modal'>返回</button><button onclick='postAdd();' type='button' class='btn btn-outline-primary'>提交</button>");
-            }
-        });
-    }
-
-    //异步提交添加用户
-    function postAdd() {
+    function postWebsiteAdd() {
         $.ajax({
             type: "post",
-            url: "http://localhost:9000/user/add",
-            data: $('#addUserForm').serialize(),
+            url: "http://localhost:9000/website/add",
+            data: $('#addWebsiteForm').serialize(),
             success: function (data) {
                 if (data.code == 200) {
                     alert(data.message);
-                    setTimeout(window.location.href = 'http://localhost:9000/user/list', 1);
+                    setTimeout(window.location.href = 'http://localhost:9000/website/list', 1);
                 } else {
                     alert(data.message)
                 }
             }
-        });
+        })
     }
 
-    //删除用户
-    function delUser(id) {
-        let flag = confirm("确定删除用户吗？");
+    function editWebsite(id) {
+        $.ajax({
+            type: "get",
+            url: "http://localhost:9000/website/edit?id=" + id,
+            success: function (data) {
+                $('#modal-title').text("站点内容管理");
+                $('#modal-body').html(data);
+                $('#modal-footer').html("<button type='button' class='btn btn-outline-secondary' data-dismiss='modal'>返回</button><button onclick='postWebsiteEdit();' type='button' class='btn btn-outline-primary'>提交</button>");
+            }
+        })
+    }
+
+    function postWebsiteEdit() {
+        $.ajax({
+            type: "post",
+            url: "http://localhost:9000/website/edit",
+            data: $('#editWebsiteForm').serialize(),
+            success: function (data) {
+                if (data.code == 200) {
+                    alert(data.message);
+                    setTimeout(window.location.href = 'http://localhost:9000/website/list', 1);
+                } else {
+                    alert(data.message)
+                }
+            }
+        })
+    }
+
+    function delWebsite(id) {
+        let flag = confirm("确定删除站点吗？");
         if (flag) {
-            setTimeout(window.location.href = 'http://localhost:9000/user/delete?id=' + id, 1);
+            $.ajax({
+                type: "post",
+                url: "http://localhost:9000/website/del",
+                data: {"id": id},
+                success: function (data) {
+                    if (data.code == 200) {
+                        alert(data.message);
+                        setTimeout(window.location.href = 'http://localhost:9000/website/list', 1);
+                    } else {
+                        alert(data.message)
+                    }
+                }
+            })
         }
     }
 </script>

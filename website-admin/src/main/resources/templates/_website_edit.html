@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登陆</title>
+    <!-- css -->
+    <th:block th:replace="_fragment :: _css">
+        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css"
+              th:href="@{/bootstrap/css/bootstrap.min.css}">
+        <link rel="stylesheet" href="../static/css/admin.css" th:href="@{/css/admin.css}">
+    </th:block>
+    <!-- css -->
+</head>
+<body>
+
+<form id="editWebsiteForm">
+    <div class="form-group">
+        <input name="id" type="hidden" th:value="${websiteInfo?.id}">
+        <div class="col-4">
+            <label for="name">站点名称：</label>
+        </div>
+        <div class="col-8">
+            <input id="name" name="name" type="text" class="form-control" placeholder="站点名称" th:value="${websiteInfo?.name}">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-4">
+            <label for="url">链接地址：</label>
+        </div>
+        <div class="col-8">
+            <input id="url" name="url" type="text" class="form-control" placeholder="链接地址" th:value="${websiteInfo?.url}">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-4">
+            <label>置顶推荐：</label>
+        </div>
+        <div class="col-8">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="top" name="top" th:checked="${websiteInfo?.top}">
+                <label class="custom-control-label" for="top"></label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-4">
+            <label>启用状态：</label>
+        </div>
+        <div class="col-8">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="status" name="status" th:checked="${websiteInfo?.status}">
+                <label class="custom-control-label" for="status"></label>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+</body>
+<!-- javascript -->
+<th:block th:replace="_fragment :: _javascript">
+    <script src="../static/jquery/jquery-3.4.1.min.js" th:src="@{/jquery/jquery-3.4.1.min.js}"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</th:block>
+<!-- javascript -->
+</html>

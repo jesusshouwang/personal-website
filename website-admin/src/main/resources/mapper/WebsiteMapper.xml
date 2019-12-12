@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.noobking.personalwebsite.website.admin.mapper.WebsiteMapper">
+    <sql id="websiteAllInfo">
+        a.id,
+        a.name,
+        a.url,
+        a.top,
+        a.status
+    </sql>
+
+    <select id="getWebsiteById" resultType="Website">
+        SELECT
+            <include refid="websiteAllInfo"></include>
+        FROM
+            website AS a
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <select id="getAllWebsite" resultType="Website">
+        SELECT
+            <include refid="websiteAllInfo"></include>
+        FROM
+            website AS a
+    </select>
+
+    <insert id="insertWebsite">
+        INSERT INTO
+            website(
+                name,
+                url,
+                top,
+                status
+            )VALUES (
+                #{name},
+                #{url},
+                #{top},
+                #{status}
+            )
+    </insert>
+
+    <update id="updateWebsite">
+        UPDATE
+            website
+        SET
+            name = #{name},
+            url = #{url},
+            top = #{top},
+            status= #{status}
+        WHERE
+            id = #{id}
+    </update>
+
+    <delete id="deleteWebsite">
+        DELETE FROM
+             website
+        WHERE
+            id = #{id}
+    </delete>
+
+</mapper>

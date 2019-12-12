@@ -19,6 +19,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/admin/**")
                 //拦截article下路径
                 .addPathPatterns("/article/**")
+                //拦截website下路径
+                .addPathPatterns("/website/**")
                 //开放登陆接口
                 .excludePathPatterns("/user/login");
     }

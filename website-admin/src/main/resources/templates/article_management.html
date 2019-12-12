@@ -56,12 +56,12 @@
 <!-- 导航条 -->
 
 <!-- 面包屑导航 -->
-<nav aria-label="breadcrumb" style="box-shadow: 0 0 10px #909399;">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/admin/main" th:href="@{/admin/main}">首页</a></li>
-        <li class="breadcrumb-item active" aria-current="page">文章管理</li>
+<div class="float-right" style="margin-right: 15px">
+    <ol class="breadcrumb bg-transparent">
+        <li class="breadcrumb-item font-italic" aria-current="page"><a href="/admin/main" th:href="@{/admin/main}">首页</a></li>
+        <li class="breadcrumb-item active font-italic">文章管理</li>
     </ol>
-</nav>
+</div>
 <!-- 面包屑导航 -->
 
 <main class="container">
@@ -71,44 +71,46 @@
         <a href="/article/add" th:href="@{/article/add}" class="btn btn-sm btn-outline-primary">新增</a>
         <!-- 管理面板 -->
         <div class="row admin-padding-lrtb-small">
-            <table class="table table-sm table-hover w-100">
-                <thead>
-                <tr>
-                    <th scope="col" class="align-middle">文章编号</th>
-                    <th scope="col" class="align-middle">分类</th>
-                    <th scope="col" class="align-middle">标题</th>
-                    <th scope="col" class="align-middle">作者</th>
-                    <th scope="col" class="align-middle">状态</th>
-                    <th scope="col" class="align-middle">操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="article : ${pageinfoAritcle.list}">
-                    <th scope="row" th:text="${article?.id}" class="align-middle admin-w-10">1</th>
-                    <td th:text="${article?.type?.name}" class="align-middle admin-w-10">类型</td>
-                    <td th:text="${article?.title}" class="align-middle admin-w-30">标题</td>
-                    <td th:text="${article?.user?.username}" class="align-middle admin-w-15">作者</td>
-                    <td class="align-middle admin-w-15"><a th:onclick="'editStatus(' + ${article?.id} + ');'"
-                                                           class="badge"
-                                                           href="#"
-                                                           th:classappend="${article?.published}?'badge-primary':'badge-secondary'"
-                                                           th:text="${article?.published}?'已发布':'未发布'"
-                                                           data-toggle="modal"
-                                                           data-target="#modal-common"></a></td>
-                    <td class="align-middle">
-                        <button th:onclick="" type="button"
-                                class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-common">
-                            查看
-                        </button>
-                        <a href="/article/add" th:href="@{/article/add(id=${article?.id})}"
-                           class="btn btn-sm btn-outline-primary">编辑</a>
-                        <button th:onclick="'delArticle(' + ${article?.id} + ');'" type="button"
-                                class="btn btn-sm btn-outline-danger">删除
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="align-middle text-center text-nowrap">文章编号</th>
+                        <th scope="col" class="align-middle text-center text-nowrap">分类</th>
+                        <th scope="col" class="align-middle text-center text-nowrap">标题</th>
+                        <th scope="col" class="align-middle text-center text-nowrap">作者</th>
+                        <th scope="col" class="align-middle text-center text-nowrap">状态</th>
+                        <th scope="col" class="align-middle text-center text-nowrap">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="article : ${pageinfoAritcle.list}">
+                        <th scope="row" th:text="${article?.id}" class="align-middle admin-w-100 text-truncate text-center text-nowrap">1</th>
+                        <td th:text="${article?.type?.name}" class="align-middle admin-w-100 text-truncate text-center text-nowrap">类型</td>
+                        <td th:text="${article?.title}" class="align-middle admin-w-300 text-truncate text-center text-nowrap">标题</td>
+                        <td th:text="${article?.user?.username}" class="align-middle admin-w-10 text-truncate0 text-center text-nowrap">作者</td>
+                        <td class="align-middle admin-w-100 text-truncate text-center text-nowrap"><a th:onclick="'editStatus(' + ${article?.id} + ');'"
+                                                               class="badge"
+                                                               href="#"
+                                                               th:classappend="${article?.published}?'badge-primary':'badge-secondary'"
+                                                               th:text="${article?.published}?'已发布':'未发布'"
+                                                               data-toggle="modal"
+                                                               data-target="#modal-common"></a></td>
+                        <td class="align-middle text-truncate text-center text-nowrap">
+                            <button th:onclick="" type="button"
+                                    class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-common">
+                                查看
+                            </button>
+                            <a href="/article/add" th:href="@{/article/add(id=${article?.id})}"
+                               class="btn btn-sm btn-outline-primary">编辑</a>
+                            <button th:onclick="'delArticle(' + ${article?.id} + ');'" type="button"
+                                    class="btn btn-sm btn-outline-danger">删除
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="mt-lg-4" style="width: 100%;">
                 <ul class="pagination justify-content-center">
                     <li class="page-item" th:classappend="${pageinfoAritcle.isFirstPage}?'disabled':''">
@@ -190,8 +192,9 @@
         let flag = confirm("确认删除文章吗？");
         if (flag) {
             $.ajax({
-                type: "get",
-                url: "http://localhost:9000/article/del/" + id,
+                type: "post",
+                url: "http://localhost:9000/article/del",
+                data: {"id": id},
                 success: function (data) {
                     if (data.code === 200) {
                         alert(data.message);

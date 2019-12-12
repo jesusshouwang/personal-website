@@ -58,13 +58,13 @@
 </nav>
 <!-- 导航条 -->
 <!-- 面包屑导航 -->
-<nav aria-label="breadcrumb" style="box-shadow: 0 0 10px #909399;">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item" aria-current="page"><a href="/admin/main" th:href="@{/admin/main}">首页</a></li>
-        <li class="breadcrumb-item"><a href="/article/list" th:href="@{/article/list}">文章管理</a></li>
-        <li class="breadcrumb-item active">内容管理</li>
+<div class="float-right" style="margin-right: 15px">
+    <ol class="breadcrumb bg-transparent">
+        <li class="breadcrumb-item font-italic" aria-current="page"><a href="/admin/main" th:href="@{/admin/main}">首页</a></li>
+        <li class="breadcrumb-item font-italic"><a href="/article/list" th:href="@{/article/list}">文章管理</a></li>
+        <li class="breadcrumb-item active font-italic">内容管理</li>
     </ol>
-</nav>
+</div>
 <!-- 面包屑导航 -->
 <main class="container">
     <form id="addAritcleForm" action="/article/add" method="post">

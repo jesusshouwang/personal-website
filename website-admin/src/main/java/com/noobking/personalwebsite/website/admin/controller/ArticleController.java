@@ -69,8 +69,8 @@ public class ArticleController {
     }
 
     @ResponseBody
-    @GetMapping("/article/del/{id}")
-    public ResponseResult<Void> delArticle(@PathVariable Long id, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+    @PostMapping("/article/del")
+    public ResponseResult<Void> delArticle(Long id, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         ResponseResult<Void> responseResult = new ResponseResult<Void>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "没有权限删除", null);
         LoginUserInfo loginUser = (LoginUserInfo) request.getSession().getAttribute("loginUser");
         if ("admin".equals(loginUser.getUsername())) {
